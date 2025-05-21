@@ -1,0 +1,55 @@
+{%- if cookiecutter.package_manager != "poetry" -%}
+[project]
+name = "{{cookiecutter.project_name}}"
+version = "0.1.0"
+description = "{{cookiecutter.description}}"
+requires-python = ">=3.8"
+dependencies = [
+  "mantarix=={{cookiecutter.mantarix_version}}"
+]
+{% else %}
+[tool.poetry]
+name = "{{cookiecutter.project_name}}"
+version = "0.1.0"
+description = "{{cookiecutter.description}}"
+authors = ["Mantarix Developer <your@email.com>"]
+readme = "README.md"
+{% endif %}
+
+[tool.mantarix]
+# org name in reverse domain name notation, e.g. "com.mycompany".
+# Combined with project.name to build bundle ID for iOS and Android apps
+org = "com.mycompany"
+
+# project display name that is used as an app title on Android and iOS home screens,
+# shown in window titles and about app dialogs on desktop.
+product = "{{cookiecutter.project_name}}"
+
+# company name to display in about app dialogs
+company = "Mantarix"
+
+# copyright text to display in about app dialogs
+copyright = "Copyright (C) 2025 by Mantarix"
+
+[tool.mantarix.app]
+path = "src"
+
+{%- if cookiecutter.package_manager == "uv" %}
+
+[tool.uv]
+dev-dependencies = [
+    "mantarix[all]=={{cookiecutter.mantarix_version}}",
+]
+{%- elif cookiecutter.package_manager == "poetry" %}
+
+[tool.poetry.dependencies]
+python = "^3.8"
+mantarix = {version = "{{cookiecutter.mantarix_version}}"}
+
+[tool.poetry.group.dev.dependencies]
+mantarix = {extras = ["all"], version = "{{cookiecutter.mantarix_version}}"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+{% endif %}
